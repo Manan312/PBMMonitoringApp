@@ -106,9 +106,17 @@ export const PBMSync = () => {
     fetchData();
   }, []);
   const handleSelect = async (log: PBMSyncLog): Promise<void> => {
-    setSearchParams((p) => ({ ...p, PBMReferenceNo: log.PBMReferenceNo }));
-    setSearchParams((p) => ({ ...p, LivaReferenceNo: log.LivaReferenceNo }));
-    handleSearch();
+    const params = {
+      PBMReferenceNo: log.PBMReferenceNo,
+      LivaReferenceNo: log.LivaReferenceNo,
+    };
+    setLoading(true);
+    try {
+      const data = await GetPBMRequestDetails(params);
+      setSearchResults(data);
+    } finally {
+      setLoading(false);
+    }
   };
   const downloadDump = async () => {
     if (startDate===null || endDate===null) {
